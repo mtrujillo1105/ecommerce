@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Ecommerce</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            border-radius: 8px;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-custom {
+            border-radius: 25px;
+            padding: 8px 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.1);
+        }
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+        }
+        .product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+		
+		
+		
+		
+		
+		
+		
+		       /* Login Styles */
+        .login-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #6c757d;
+            margin: 0;
+        }
+
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+
+        .form-floating .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .form-floating .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .alert-floating {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #6c757d;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .input-group-password {
+            position: relative;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="bi bi-shop display-4 text-primary mb-3"></i>
+                <h2>Panel de Administración</h2>
+                <p>Ingresa tus credenciales para continuar</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="username" placeholder="Usuario" required>
+                    <label for="username"><i class="bi bi-person me-2"></i>Usuario</label>
+                </div>
+                
+                <div class="form-floating mb-3 input-group-password">
+                    <input type="password" class="form-control" id="password" placeholder="Contraseña" required>
+                    <label for="password"><i class="bi bi-lock me-2"></i>Contraseña</label>
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <i class="bi bi-eye" id="passwordToggleIcon"></i>
+                    </button>
+                </div>
+                
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">
+                        Recordarme
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-login">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <small class="text-muted">
+                    <i class="bi bi-shield-check me-1"></i>
+                    Conexión segura y protegida
+                </small>
+                <br>
+                <small class="text-muted mt-2 d-block">
+                    <strong>Demo:</strong> admin / admin123
+                </small>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0">
+                <div class="sidebar p-3">
+                    <div class="text-center mb-4">
+                        <h4 class="text-white"><i class="bi bi-shop"></i> Admin Panel</h4>
+                    </div>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                        <a class="nav-link" href="#" onclick="showSection('products')">
+                            <i class="bi bi-box-seam"></i> Productos
+                        </a>
+                        <a class="nav-link" href="#" onclick="showSection('categories')">
+                            <i class="bi bi-tags"></i> Categorías
+                        </a>
+                        <a class="nav-link" href="#" onclick="showSection('orders')">
+                            <i class="bi bi-receipt"></i> Pedidos
+                        </a>
+                        <a class="nav-link" href="#" onclick="showSection('customers')">
+                            <i class="bi bi-people"></i> Clientes
+                        </a>
+                        <a class="nav-link" href="#" onclick="showSection('settings')">
+                            <i class="bi bi-gear"></i> Configuración
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10">
+                <div class="p-4">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0">Panel de Administración</h2>
+                        <div class="d-flex align-items-center">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle"></i> Admin
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Perfil</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Section -->
+                    <div id="dashboard" class="page-section active">
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-3">
+                                <div class="card stat-card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-box-seam fs-1"></i>
+                                        <h3 class="mt-2">245</h3>
+                                        <p class="mb-0">Productos</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card stat-card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-tags fs-1"></i>
+                                        <h3 class="mt-2">12</h3>
+                                        <p class="mb-0">Categorías</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card stat-card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-receipt fs-1"></i>
+                                        <h3 class="mt-2">89</h3>
+                                        <p class="mb-0">Pedidos</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card stat-card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-people fs-1"></i>
+                                        <h3 class="mt-2">156</h3>
+                                        <p class="mb-0">Clientes</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Pedidos Recientes</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Cliente</th>
+                                                        <th>Total</th>
+                                                        <th>Estado</th>
+                                                        <th>Fecha</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>#001</td>
+                                                        <td>Juan Pérez</td>
+                                                        <td>$125.00</td>
+                                                        <td><span class="badge bg-success">Completado</span></td>
+                                                        <td>2024-01-15</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#002</td>
+                                                        <td>María García</td>
+                                                        <td>$89.50</td>
+                                                        <td><span class="badge bg-warning">Pendiente</span></td>
+                                                        <td>2024-01-14</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#003</td>
+                                                        <td>Carlos López</td>
+                                                        <td>$250.00</td>
+                                                        <td><span class="badge bg-info">Enviado</span></td>
+                                                        <td>2024-01-13</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Productos Populares</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <img src="https://via.placeholder.com/50" class="product-img me-3" alt="Producto">
+                                            <div>
+                                                <h6 class="mb-0">Smartphone Pro</h6>
+                                                <small class="text-muted">45 ventas</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-3">
+                                            <img src="https://via.placeholder.com/50" class="product-img me-3" alt="Producto">
+                                            <div>
+                                                <h6 class="mb-0">Laptop Gaming</h6>
+                                                <small class="text-muted">32 ventas</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/50" class="product-img me-3" alt="Producto">
+                                            <div>
+                                                <h6 class="mb-0">Auriculares BT</h6>
+                                                <small class="text-muted">28 ventas</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Section -->
+                    <div id="products" class="page-section">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3>Gestión de Productos</h3>
+                            <button class="btn btn-primary btn-custom" data-bs-toggle="modal" data-bs-target="#productModal">
+                                <i class="bi bi-plus-circle"></i> Nuevo Producto
+                            </button>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="Buscar productos...">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-select">
+                                            <option>Todas las categorías</option>
+                                            <option>Electrónicos</option>
+                                            <option>Ropa</option>
+                                            <option>Hogar</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-select">
+                                            <option>Todos los estados</option>
+                                            <option>Activo</option>
+                                            <option>Inactivo</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Imagen</th>
+                                                <th>Nombre</th>
+                                                <th>Categoría</th>
+                                                <th>Precio</th>
+                                                <th>Stock</th>
+                                                <th>Estado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><img src="https://via.placeholder.com/50" class="product-img" alt="Producto"></td>
+                                                <td>iPhone 14 Pro</td>
+                                                <td>Electrónicos</td>
+                                                <td>$999.00</td>
+                                                <td>25</td>
+                                                <td><span class="badge bg-success">Activo</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="https://via.placeholder.com/50" class="product-img" alt="Producto"></td>
+                                                <td>MacBook Air M2</td>
+                                                <td>Electrónicos</td>
+                                                <td>$1299.00</td>
+                                                <td>15</td>
+                                                <td><span class="badge bg-success">Activo</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="https://via.placeholder.com/50" class="product-img" alt="Producto"></td>
+                                                <td>Camiseta Nike</td>
+                                                <td>Ropa</td>
+                                                <td>$29.99</td>
+                                                <td>100</td>
+                                                <td><span class="badge bg-warning">Inactivo</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <nav>
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categories Section -->
+                    <div id="categories" class="page-section">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3>Gestión de Categorías</h3>
+                            <button class="btn btn-primary btn-custom" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                                <i class="bi bi-plus-circle"></i> Nueva Categoría
+                            </button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Nombre</th>
+                                                        <th>Descripción</th>
+                                                        <th>Productos</th>
+                                                        <th>Estado</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Electrónicos</td>
+                                                        <td>Dispositivos electrónicos y tecnología</td>
+                                                        <td>156</td>
+                                                        <td><span class="badge bg-success">Activo</span></td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>Ropa</td>
+                                                        <td>Vestimenta y accesorios</td>
+                                                        <td>89</td>
+                                                        <td><span class="badge bg-success">Activo</span></td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>Hogar</td>
+                                                        <td>Artículos para el hogar</td>
+                                                        <td>45</td>
+                                                        <td><span class="badge bg-warning">Inactivo</span></td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Estadísticas de Categorías</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between">
+                                                <span>Electrónicos</span>
+                                                <span>63%</span>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar" style="width: 63%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between">
+                                                <span>Ropa</span>
+                                                <span>36%</span>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success" style="width: 36%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between">
+                                                <span>Hogar</span>
+                                                <span>18%</span>
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-warning" style="width: 18%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other sections (placeholder) -->
+                    <div id="orders" class="page-section">
+                        <h3>Gestión de Pedidos</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <p>Módulo de pedidos en desarrollo...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="customers" class="page-section">
+                        <h3>Gestión de Clientes</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <p>Módulo de clientes en desarrollo...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="settings" class="page-section">
+                        <h3>Configuración</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <p>Configuración del sistema en desarrollo...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nuevo Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nombre del Producto</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Categoría</label>
+                                <select class="form-select">
+                                    <option>Seleccionar categoría</option>
+                                    <option>Electrónicos</option>
+                                    <option>Ropa</option>
+                                    <option>Hogar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Precio</label>
+                                <input type="number" class="form-control" step="0.01">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Stock</label>
+                                <input type="number" class="form-control">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Imagen</label>
+                            <input type="file" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Guardar Producto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div class="modal fade" id="categoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nueva Categoría</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la Categoría</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select">
+                                <option value="active">Activo</option>
+                                <option value="inactive">Inactivo</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Guardar Categoría</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update active nav link
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+</body>
+</html>
